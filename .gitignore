@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+venv/
+jieshiqi/
+
+# Node
+node_modules/
+dist/
+
+# IDE / 编辑器
+.idea/
+.qoder/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 数据 / 隐私（已脱敏，但保留规则防止误传）
+data/
+backend/data/
+*.db
+*.pkl
+uploads/
+snapshots/
+face_db/
+
+# 环境变量（敏感信息，绝不 push）
+.env
+*.env
+!.env.example
+
+# 日志 / 临时文件
+*.log
+*.tmp
+*.pid

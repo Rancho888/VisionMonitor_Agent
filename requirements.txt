@@ -1,0 +1,42 @@
+# ============================================
+# Vision Monitor Agent - Python 环境依赖
+# Python 3.10 推荐
+#
+# ========== 安装方式（清华镜像源）==========
+#   conda create -n monitor_agent python=3.10 -y
+#   conda activate monitor_agent
+#   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+# ============================================
+
+# --- Web 框架 ---
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+websockets>=12.0
+python-multipart>=0.0.9
+
+# --- Agent 框架 ---
+langgraph
+langchain
+langchain-core
+langchain-openai
+langchain-community
+
+# --- 计算机视觉（InsightFace SCRFD + ArcFace 远距离人脸识别）---
+opencv-python-headless>=4.10.0
+insightface>=0.7.3
+onnxruntime>=1.18.0
+Pillow>=10.3.0
+numpy>=1.26.0,<2.0.0
+
+# --- 向量检索 ---
+faiss-cpu>=1.8.0
+
+# --- 数据库 ---
+sqlalchemy>=2.0.30
+aiosqlite>=0.20.0
+
+# --- 工具 ---
+pydantic>=2.7.0
+python-dotenv>=1.0.0
+httpx>=0.27.0
+aiofiles>=23.0.0

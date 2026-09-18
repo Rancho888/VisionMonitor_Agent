@@ -1,0 +1,42 @@
+# ============================================
+# Vision Monitor Agent - 容器编排
+# 使用: podman-compose up --build
+# ============================================
+version: "3.8"
+
+services:
+  # --- 后端服务 ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: monitor-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      # 数据持久化（容器删除后数据不丢失）
+      - ./data:/app/data
+      - ./backend/data:/app/backend/data
+    healthcheck:
+      # 等服务真正就绪后再启动前端，避免依赖未就绪导致首次 502
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # --- 前端服务 ---
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: monitor-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

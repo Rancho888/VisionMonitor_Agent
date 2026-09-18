@@ -1,0 +1,36 @@
+# ============================================
+# Vision Monitor Agent - 后端服务
+# Python 3.10 + FastAPI
+# ============================================
+FROM python:3.10-slim
+
+# 安装系统依赖（OpenCV、InsightFace 需要）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# 先复制依赖文件，利用 Docker 缓存层
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 复制后端代码
+COPY backend/ ./backend/
+
+# 创建数据目录
+RUN mkdir -p /app/data/face_db /app/data/snapshots /app/data/uploads
+
+# 环境变量
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+EXPOSE 8000
+
+# 启动命令（从项目根目录运行，匹配 import 路径 backend.app.main）
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
